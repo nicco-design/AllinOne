@@ -42,6 +42,7 @@
       border-radius: 14px; background: #f8f9ff; border: 1px solid #d7dcff;
     }
     .wheel-wrap { position: relative; width: 320px; height: 320px; margin-top: 0.5rem; }
+    .wheel-rotor { position: absolute; inset: 0; transition: transform 4s cubic-bezier(0.2, 0.7, 0.1, 1); }
     .pointer {
       position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
       width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent;
@@ -89,6 +90,10 @@
       <div class="spinning-panel">
         <div class="wheel-wrap">
           <div class="pointer"></div>
+          <div id="wheel-rotor" class="wheel-rotor">
+            <div id="wheel" class="wheel"></div>
+            <div id="labels" class="labels"></div>
+          </div>
           <div id="wheel" class="wheel"></div>
           <div id="labels" class="labels"></div>
         </div>
@@ -110,6 +115,7 @@
     const openSpinningButton = document.getElementById('open-spinning');
     const backToMainButton = document.getElementById('back-to-main');
 
+    const wheelRotor = document.getElementById('wheel-rotor');
     const wheel = document.getElementById('wheel');
     const labelsLayer = document.getElementById('labels');
     const labelInput = document.getElementById('label-input');
@@ -117,6 +123,7 @@
     const spinButton = document.getElementById('spin-button');
 
     const palette = ['#ffd166', '#90caf9', '#f48fb1', '#a5d6a7', '#ce93d8', '#ffab91', '#80cbc4'];
+    let items = [''];
     let items = ['Feld 1'];
     let currentRotation = 0;
 
@@ -137,6 +144,7 @@
 
         const label = document.createElement('span');
         label.className = 'label';
+        label.textContent = text || 'Feld 1';
         label.textContent = text;
         label.style.transform = `rotate(${angle}deg) translate(${radius}px) rotate(90deg)`;
         labelsLayer.appendChild(label);
@@ -157,6 +165,16 @@
       const raw = labelInput.value.trim();
       if (!raw) return;
 
+      const hasOnlyPlaceholder = items.length === 1 && items[0] === '';
+      if (hasOnlyPlaceholder) {
+        items[0] = raw;
+      } else {
+        items.push(raw);
+      }
+
+      labelInput.value = '';
+      currentRotation = 0;
+      wheelRotor.style.transform = 'rotate(0deg)';
       items.push(raw);
       labelInput.value = '';
       currentRotation = 0;
@@ -167,6 +185,7 @@
     spinButton.addEventListener('click', () => {
       const extra = 4 * 360 + Math.floor(Math.random() * 360);
       currentRotation += extra;
+      wheelRotor.style.transform = `rotate(${currentRotation}deg)`;
       wheel.style.transform = `rotate(${currentRotation}deg)`;
     });
 
