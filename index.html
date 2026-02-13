@@ -75,6 +75,7 @@
       <h1>Hauptseite</h1>
       <p>Willkommen! Wähle eine Funktion:</p>
       <div class="menu">
+        <button type="button" id="open-spinning">Spinning</button>
         <button id="open-spinning">Spinning</button>
         <button class="placeholder">Button 2</button>
         <button class="placeholder">Button 3</button>
@@ -84,6 +85,7 @@
     <section id="spinning-page" class="hidden">
       <div class="page-header">
         <h1>Spinning</h1>
+        <button type="button" id="back-to-main">Zurück zur Hauptseite</button>
         <button id="back-to-main">Zurück zur Hauptseite</button>
       </div>
 
@@ -101,6 +103,10 @@
         <p class="small">Eine Beschriftung eingeben und hinzufügen:</p>
         <div class="controls">
           <input id="label-input" type="text" placeholder="z. B. Sport" />
+          <button type="button" id="add-label">Beschriftung hinzufügen</button>
+        </div>
+
+        <button type="button" id="spin-button" class="spin-button">Spinning</button>
           <button id="add-label">Beschriftung hinzufügen</button>
         </div>
 
@@ -151,6 +157,22 @@
       });
     }
 
+    function showMainPage() {
+      spinningPage.classList.add('hidden');
+      mainPage.classList.remove('hidden');
+    }
+
+    function showSpinningPage() {
+      mainPage.classList.add('hidden');
+      spinningPage.classList.remove('hidden');
+    }
+
+    openSpinningButton.addEventListener('click', () => {
+      showSpinningPage();
+    });
+
+    backToMainButton.addEventListener('click', () => {
+      showMainPage();
     openSpinningButton.addEventListener('click', () => {
       mainPage.classList.add('hidden');
       spinningPage.classList.remove('hidden');
