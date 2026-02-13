@@ -179,6 +179,33 @@
       spinningPage.classList.remove('hidden');
     }
 
+    function normalizeMainMenu() {
+      const menu = document.getElementById('main-menu');
+      if (!menu) return;
+
+      const buttons = Array.from(menu.querySelectorAll('button'));
+      const firstSpinning = buttons.find((button) => button.textContent.trim().toLowerCase() === 'spinning');
+
+      menu.innerHTML = '';
+      if (firstSpinning) {
+        firstSpinning.id = 'open-spinning';
+        firstSpinning.type = 'button';
+        menu.appendChild(firstSpinning);
+      }
+    }
+
+    function handleMainMenuClick(event) {
+      const clickedButton = event.target.closest('button');
+      if (!clickedButton) return;
+      if (clickedButton.textContent.trim().toLowerCase() === 'spinning') {
+        showSpinningPage();
+      }
+    }
+
+    normalizeMainMenu();
+    document.getElementById('main-menu').addEventListener('click', handleMainMenuClick);
+    openSpinningButton.addEventListener('click', showSpinningPage);
+    backToMainButton.addEventListener('click', showMainPage);
     openSpinningButton.addEventListener('click', showSpinningPage);
     backToMainButton.addEventListener('click', showMainPage);
     function ensureSingleMainSpinningButton() {
