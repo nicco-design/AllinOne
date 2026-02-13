@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mehrzweck Website</title>
   <style>
+    :root { font-family: Arial, sans-serif; color-scheme: light; }
     :root {
       font-family: Arial, sans-serif;
       color-scheme: light;
@@ -50,6 +51,7 @@
     }
     .wheel {
       position: absolute; inset: 0; border-radius: 50%; border: 8px solid #fff;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15); overflow: hidden; background: #ddd;
       box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
       transition: transform 4s cubic-bezier(0.2, 0.7, 0.1, 1);
       overflow: hidden; background: #ddd;
@@ -57,6 +59,7 @@
     .labels { position: absolute; inset: 0; pointer-events: none; }
     .label {
       position: absolute; top: 50%; left: 50%; transform-origin: 0 0; font-size: 0.85rem;
+      font-weight: bold; color: #1a1a1a; text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9); white-space: nowrap;
       font-weight: bold; color: #1a1a1a; text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
       white-space: nowrap;
     }
@@ -76,6 +79,8 @@
       <p>Willkommen! Wähle eine Funktion:</p>
       <div class="menu" id="main-menu">
         <button type="button" id="open-spinning">Spinning</button>
+        <button type="button" class="placeholder">Button 2</button>
+        <button type="button" class="placeholder">Button 3</button>
       <div class="menu">
         <button type="button" id="open-spinning">Spinning</button>
         <button id="open-spinning">Spinning</button>
@@ -108,6 +113,7 @@
           <button type="button" id="add-label">Beschriftung hinzufügen</button>
         </div>
 
+        <button type="button" id="spin-button" class="spin-button">Drehen</button>
         <button type="button" id="spin-button" class="spin-button">Spinning</button>
           <button id="add-label">Beschriftung hinzufügen</button>
         </div>
@@ -148,6 +154,10 @@
 
       items.forEach((text, index) => {
         const angle = index * segmentAngle + segmentAngle / 2;
+        const label = document.createElement('span');
+        label.className = 'label';
+        label.textContent = text || 'Feld 1';
+        label.style.transform = `rotate(${angle}deg) translate(115px) rotate(90deg)`;
         const radius = 115;
 
         const label = document.createElement('span');
@@ -169,6 +179,8 @@
       spinningPage.classList.remove('hidden');
     }
 
+    openSpinningButton.addEventListener('click', showSpinningPage);
+    backToMainButton.addEventListener('click', showMainPage);
     function ensureSingleMainSpinningButton() {
       const menu = document.getElementById('main-menu');
       if (!menu) return;
@@ -211,6 +223,7 @@
       const raw = labelInput.value.trim();
       if (!raw) return;
 
+      if (items.length === 1 && items[0] === '') {
       const hasOnlyPlaceholder = items.length === 1 && items[0] === '';
       if (hasOnlyPlaceholder) {
         items[0] = raw;
@@ -229,6 +242,8 @@
     });
 
     spinButton.addEventListener('click', () => {
+      currentRotation += 4 * 360 + Math.floor(Math.random() * 360);
+      wheelRotor.style.transform = `rotate(${currentRotation}deg)`;
       const extra = 4 * 360 + Math.floor(Math.random() * 360);
       currentRotation += extra;
       wheelRotor.style.transform = `rotate(${currentRotation}deg)`;
