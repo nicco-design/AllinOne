@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mehrzweck Website</title>
+  <style>
+    :root { font-family: Arial, sans-serif; color-scheme: light; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #f3f7ff 0%, #ffffff 100%);
+      color: #1a1a1a;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 2rem 1rem;
+    }
+    .app {
+      width: min(900px, 100%);
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+      padding: 1.5rem;
+    }
+    h1 { margin-top: 0; margin-bottom: 1rem; font-size: 1.6rem; }
+    .menu { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    button {
+      border: none; border-radius: 10px; cursor: pointer; font-size: 1rem;
+      padding: 0.65rem 1rem; background: #ecefff; color: #1b2d85; font-weight: 700;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    button:hover { transform: translateY(-1px); background: #dfe5ff; }
+    .placeholder { background: #f7f8fc; border: 1px dashed #c6cce9; color: #5b638f; }
+    .hidden { display: none; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+    .spinning-panel {
+      display: grid; gap: 1rem; justify-items: center; padding: 1rem;
+      border-radius: 14px; background: #f8f9ff; border: 1px solid #d7dcff;
+    }
+    .wheel-wrap { position: relative; width: 320px; height: 320px; margin-top: 0.5rem; }
+    .wheel-rotor { position: absolute; inset: 0; transition: transform 4s cubic-bezier(0.2, 0.7, 0.1, 1); }
+    .pointer {
+      position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent;
+      border-top: 20px solid #e43d3d; z-index: 2;
+    }
+    .wheel {
+      position: absolute; inset: 0; border-radius: 50%; border: 8px solid #fff;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15); overflow: hidden; background: #ddd;
+    }
+    .labels { position: absolute; inset: 0; pointer-events: none; }
+    .label {
+      position: absolute; top: 50%; left: 50%; transform-origin: 0 0; font-size: 0.85rem;
+      font-weight: bold; color: #1a1a1a; text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9); white-space: nowrap;
+    }
+    .controls { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
+    input[type="text"] {
+      min-width: 240px; border: 1px solid #bbc2eb; border-radius: 8px;
+      padding: 0.55rem 0.7rem; font-size: 1rem;
+    }
+    .spin-button { background: #1b2d85; color: #fff; min-width: 130px; }
+    .small { font-size: 0.9rem; color: #4b4f6b; margin: 0; }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section id="main-page">
+      <h1>Hauptseite</h1>
+      <p>Willkommen! Wähle eine Funktion:</p>
+      <div class="menu" id="main-menu">
+        <button type="button" id="open-spinning">Spinning</button>
+      </div>
+    </section>
+
+    <section id="spinning-page" class="hidden">
+      <div class="page-header">
+        <h1>Spinning</h1>
+        <button type="button" id="back-to-main">Zurück zur Hauptseite</button>
+      </div>
+
+      <div class="spinning-panel">
+        <div class="wheel-wrap">
+          <div class="pointer"></div>
+          <div id="wheel-rotor" class="wheel-rotor">
+            <div id="wheel" class="wheel"></div>
+            <div id="labels" class="labels"></div>
+          </div>
+        </div>
+
+        <p class="small">Eine Beschriftung eingeben und hinzufügen:</p>
+        <div class="controls">
+          <input id="label-input" type="text" placeholder="z. B. Sport" />
+          <button type="button" id="add-label">Beschriftung hinzufügen</button>
+        </div>
+
+        <button type="button" id="spin-button" class="spin-button">Drehen</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const mainPage = document.getElementById('main-page');
+    const spinningPage = document.getElementById('spinning-page');
+    const openSpinningButton = document.getElementById('open-spinning');
+    const backToMainButton = document.getElementById('back-to-main');
+
+    const wheelRotor = document.getElementById('wheel-rotor');
+    const wheel = document.getElementById('wheel');
+    const labelsLayer = document.getElementById('labels');
+    const labelInput = document.getElementById('label-input');
+    const addLabelButton = document.getElementById('add-label');
+    const spinButton = document.getElementById('spin-button');
+
+    const palette = ['#ffd166', '#90caf9', '#f48fb1', '#a5d6a7', '#ce93d8', '#ffab91', '#80cbc4'];
+    let items = [''];
+    let currentRotation = 0;
+
+    function renderWheel() {
+      const segmentAngle = 360 / items.length;
+      const gradientParts = items.map((_, index) => {
+        const start = index * segmentAngle;
+        const end = (index + 1) * segmentAngle;
+        return `${palette[index % palette.length]} ${start}deg ${end}deg`;
+      });
+
+      wheel.style.background = `conic-gradient(${gradientParts.join(', ')})`;
+      labelsLayer.innerHTML = '';
+
+      items.forEach((text, index) => {
+        const angle = index * segmentAngle + segmentAngle / 2;
+        const label = document.createElement('span');
+        label.className = 'label';
+        label.textContent = text || 'Feld 1';
+        label.style.transform = `rotate(${angle}deg) translate(115px) rotate(90deg)`;
+        labelsLayer.appendChild(label);
+      });
+    }
+
+    function showMainPage() {
+      spinningPage.classList.add('hidden');
+      mainPage.classList.remove('hidden');
+    }
+
+    function showSpinningPage() {
+      mainPage.classList.add('hidden');
+      spinningPage.classList.remove('hidden');
+    }
+
+    function normalizeMainMenu() {
+      const menu = document.getElementById('main-menu');
+      if (!menu) return;
+
+      const buttons = Array.from(menu.querySelectorAll('button'));
+      const firstSpinning = buttons.find((button) => button.textContent.trim().toLowerCase() === 'spinning');
+
+      menu.innerHTML = '';
+      if (firstSpinning) {
+        firstSpinning.id = 'open-spinning';
+        firstSpinning.type = 'button';
+        menu.appendChild(firstSpinning);
+      }
+    }
+
+    function handleMainMenuClick(event) {
+      const clickedButton = event.target.closest('button');
+      if (!clickedButton) return;
+      if (clickedButton.textContent.trim().toLowerCase() === 'spinning') {
+        showSpinningPage();
+      }
+    }
+
+    normalizeMainMenu();
+    document.getElementById('main-menu').addEventListener('click', handleMainMenuClick);
+    openSpinningButton.addEventListener('click', showSpinningPage);
+    backToMainButton.addEventListener('click', showMainPage);
+
+    addLabelButton.addEventListener('click', () => {
+      const raw = labelInput.value.trim();
+      if (!raw) return;
+
+      if (items.length === 1 && items[0] === '') {
+        items[0] = raw;
+      } else {
+        items.push(raw);
+      }
+
+      labelInput.value = '';
+      currentRotation = 0;
+      wheelRotor.style.transform = 'rotate(0deg)';
+      renderWheel();
+    });
+
+    spinButton.addEventListener('click', () => {
+      currentRotation += 4 * 360 + Math.floor(Math.random() * 360);
+      wheelRotor.style.transform = `rotate(${currentRotation}deg)`;
+    });
+
+    renderWheel();
+  </script>
+</body>
+</html>
