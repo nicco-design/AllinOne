@@ -74,6 +74,8 @@
     <section id="main-page">
       <h1>Hauptseite</h1>
       <p>Willkommen! Wähle eine Funktion:</p>
+      <div class="menu" id="main-menu">
+        <button type="button" id="open-spinning">Spinning</button>
       <div class="menu">
         <button type="button" id="open-spinning">Spinning</button>
         <button id="open-spinning">Spinning</button>
@@ -167,6 +169,28 @@
       spinningPage.classList.remove('hidden');
     }
 
+    function ensureSingleMainSpinningButton() {
+      const menu = document.getElementById('main-menu');
+      if (!menu) return;
+
+      const menuButtons = Array.from(menu.querySelectorAll('button'));
+      const spinningButtons = menuButtons.filter((button) =>
+        button.textContent.trim().toLowerCase() === 'spinning'
+      );
+
+      spinningButtons.slice(1).forEach((button) => button.remove());
+    }
+
+    ensureSingleMainSpinningButton();
+
+    function goToSpinningPage() {
+      showSpinningPage();
+    }
+
+    openSpinningButton.onclick = goToSpinningPage;
+
+    backToMainButton.addEventListener('click', () => {
+      showMainPage();
     openSpinningButton.addEventListener('click', () => {
       showSpinningPage();
     });
