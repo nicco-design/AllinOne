@@ -9,7 +9,6 @@
       font-family: Arial, sans-serif;
       color-scheme: light;
     }
-
     body {
       margin: 0;
       min-height: 100vh;
@@ -20,7 +19,6 @@
       align-items: flex-start;
       padding: 2rem 1rem;
     }
-
     .app {
       width: min(900px, 100%);
       background: #fff;
@@ -28,139 +26,46 @@
       box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
       padding: 1.5rem;
     }
-
-    h1 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-      font-size: 1.6rem;
-    }
-
-    .menu {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      margin-bottom: 1.5rem;
-    }
-
+    h1 { margin-top: 0; margin-bottom: 1rem; font-size: 1.6rem; }
+    .menu { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
     button {
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 1rem;
-      padding: 0.65rem 1rem;
-      background: #ecefff;
-      color: #1b2d85;
-      font-weight: 700;
+      border: none; border-radius: 10px; cursor: pointer; font-size: 1rem;
+      padding: 0.65rem 1rem; background: #ecefff; color: #1b2d85; font-weight: 700;
       transition: transform 0.15s ease, background 0.15s ease;
     }
-
-    button:hover {
-      transform: translateY(-1px);
-      background: #dfe5ff;
-    }
-
-    .placeholder {
-      background: #f7f8fc;
-      border: 1px dashed #c6cce9;
-      color: #5b638f;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-    }
-
+    button:hover { transform: translateY(-1px); background: #dfe5ff; }
+    .placeholder { background: #f7f8fc; border: 1px dashed #c6cce9; color: #5b638f; }
+    .hidden { display: none; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
     .spinning-panel {
-      display: grid;
-      gap: 1rem;
-      justify-items: center;
-      padding: 1rem;
-      border-radius: 14px;
-      background: #f8f9ff;
-      border: 1px solid #d7dcff;
+      display: grid; gap: 1rem; justify-items: center; padding: 1rem;
+      border-radius: 14px; background: #f8f9ff; border: 1px solid #d7dcff;
     }
-
-    .wheel-wrap {
-      position: relative;
-      width: 320px;
-      height: 320px;
-      margin-top: 0.5rem;
-    }
-
+    .wheel-wrap { position: relative; width: 320px; height: 320px; margin-top: 0.5rem; }
     .pointer {
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 0;
-      border-left: 12px solid transparent;
-      border-right: 12px solid transparent;
-      border-top: 20px solid #e43d3d;
-      z-index: 2;
+      position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent;
+      border-top: 20px solid #e43d3d; z-index: 2;
     }
-
     .wheel {
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      border: 8px solid #fff;
+      position: absolute; inset: 0; border-radius: 50%; border: 8px solid #fff;
       box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
       transition: transform 4s cubic-bezier(0.2, 0.7, 0.1, 1);
-      overflow: hidden;
-      background: #ddd;
+      overflow: hidden; background: #ddd;
     }
-
-    .labels {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
+    .labels { position: absolute; inset: 0; pointer-events: none; }
     .label {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform-origin: 0 0;
-      font-size: 0.85rem;
-      font-weight: bold;
-      color: #1a1a1a;
-      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
+      position: absolute; top: 50%; left: 50%; transform-origin: 0 0; font-size: 0.85rem;
+      font-weight: bold; color: #1a1a1a; text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
       white-space: nowrap;
     }
-
-    .controls {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
+    .controls { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
     input[type="text"] {
-      min-width: 240px;
-      border: 1px solid #bbc2eb;
-      border-radius: 8px;
-      padding: 0.55rem 0.7rem;
-      font-size: 1rem;
+      min-width: 240px; border: 1px solid #bbc2eb; border-radius: 8px;
+      padding: 0.55rem 0.7rem; font-size: 1rem;
     }
-
-    .spin-button {
-      background: #1b2d85;
-      color: #fff;
-      min-width: 130px;
-    }
-
-    .small {
-      font-size: 0.9rem;
-      color: #4b4f6b;
-      margin: 0;
-    }
+    .spin-button { background: #1b2d85; color: #fff; min-width: 130px; }
+    .small { font-size: 0.9rem; color: #4b4f6b; margin: 0; }
   </style>
 </head>
 <body>
@@ -188,10 +93,10 @@
           <div id="labels" class="labels"></div>
         </div>
 
-        <p class="small">Beschriftungen hinzufügen (mit Komma trennen):</p>
+        <p class="small">Eine Beschriftung eingeben und hinzufügen:</p>
         <div class="controls">
-          <input id="label-input" type="text" placeholder="z. B. Sport, Lesen, Musik" />
-          <button id="apply-labels">Beschriftung übernehmen</button>
+          <input id="label-input" type="text" placeholder="z. B. Sport" />
+          <button id="add-label">Beschriftung hinzufügen</button>
         </div>
 
         <button id="spin-button" class="spin-button">Spinning</button>
@@ -208,18 +113,14 @@
     const wheel = document.getElementById('wheel');
     const labelsLayer = document.getElementById('labels');
     const labelInput = document.getElementById('label-input');
-    const applyLabelsButton = document.getElementById('apply-labels');
+    const addLabelButton = document.getElementById('add-label');
     const spinButton = document.getElementById('spin-button');
 
     const palette = ['#ffd166', '#90caf9', '#f48fb1', '#a5d6a7', '#ce93d8', '#ffab91', '#80cbc4'];
-    let items = ['Gewinn', 'Bonus', 'Pause', 'Aufgabe'];
+    let items = ['Feld 1'];
     let currentRotation = 0;
 
     function renderWheel() {
-      if (!items.length) {
-        items = ['Eintrag'];
-      }
-
       const segmentAngle = 360 / items.length;
       const gradientParts = items.map((_, index) => {
         const start = index * segmentAngle;
@@ -252,21 +153,15 @@
       mainPage.classList.remove('hidden');
     });
 
-    applyLabelsButton.addEventListener('click', () => {
+    addLabelButton.addEventListener('click', () => {
       const raw = labelInput.value.trim();
       if (!raw) return;
 
-      const newItems = raw
-        .split(',')
-        .map((item) => item.trim())
-        .filter(Boolean);
-
-      if (newItems.length >= 1) {
-        items = newItems;
-        currentRotation = 0;
-        wheel.style.transform = 'rotate(0deg)';
-        renderWheel();
-      }
+      items.push(raw);
+      labelInput.value = '';
+      currentRotation = 0;
+      wheel.style.transform = 'rotate(0deg)';
+      renderWheel();
     });
 
     spinButton.addEventListener('click', () => {
