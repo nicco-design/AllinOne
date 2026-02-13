@@ -69,6 +69,13 @@
       display: none;
     }
 
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
     .spinning-panel {
       display: grid;
       gap: 1rem;
@@ -136,7 +143,7 @@
     }
 
     input[type="text"] {
-      min-width: 220px;
+      min-width: 240px;
       border: 1px solid #bbc2eb;
       border-radius: 8px;
       padding: 0.55rem 0.7rem;
@@ -158,34 +165,46 @@
 </head>
 <body>
   <main class="app">
-    <h1>Einfache Website mit mehreren Buttons</h1>
+    <section id="main-page">
+      <h1>Hauptseite</h1>
+      <p>Willkommen! Wähle eine Funktion:</p>
+      <div class="menu">
+        <button id="open-spinning">Spinning</button>
+        <button class="placeholder">Button 2</button>
+        <button class="placeholder">Button 3</button>
+      </div>
+    </section>
 
-    <div class="menu">
-      <button id="show-spinning">Spinning</button>
-      <button class="placeholder">Button 2</button>
-      <button class="placeholder">Button 3</button>
-    </div>
-
-    <section id="spinning-panel" class="spinning-panel hidden">
-      <div class="wheel-wrap">
-        <div class="pointer"></div>
-        <div id="wheel" class="wheel"></div>
-        <div id="labels" class="labels"></div>
+    <section id="spinning-page" class="hidden">
+      <div class="page-header">
+        <h1>Spinning</h1>
+        <button id="back-to-main">Zurück zur Hauptseite</button>
       </div>
 
-      <p class="small">Beschriftungen hinzufügen (mit Komma trennen):</p>
-      <div class="controls">
-        <input id="label-input" type="text" placeholder="z. B. Sport, Lesen, Musik" />
-        <button id="apply-labels">Beschriftung hinzufügen</button>
-      </div>
+      <div class="spinning-panel">
+        <div class="wheel-wrap">
+          <div class="pointer"></div>
+          <div id="wheel" class="wheel"></div>
+          <div id="labels" class="labels"></div>
+        </div>
 
-      <button id="spin-button" class="spin-button">Spinning</button>
+        <p class="small">Beschriftungen hinzufügen (mit Komma trennen):</p>
+        <div class="controls">
+          <input id="label-input" type="text" placeholder="z. B. Sport, Lesen, Musik" />
+          <button id="apply-labels">Beschriftung übernehmen</button>
+        </div>
+
+        <button id="spin-button" class="spin-button">Spinning</button>
+      </div>
     </section>
   </main>
 
   <script>
-    const showSpinningButton = document.getElementById('show-spinning');
-    const spinningPanel = document.getElementById('spinning-panel');
+    const mainPage = document.getElementById('main-page');
+    const spinningPage = document.getElementById('spinning-page');
+    const openSpinningButton = document.getElementById('open-spinning');
+    const backToMainButton = document.getElementById('back-to-main');
+
     const wheel = document.getElementById('wheel');
     const labelsLayer = document.getElementById('labels');
     const labelInput = document.getElementById('label-input');
@@ -197,6 +216,10 @@
     let currentRotation = 0;
 
     function renderWheel() {
+      if (!items.length) {
+        items = ['Eintrag'];
+      }
+
       const segmentAngle = 360 / items.length;
       const gradientParts = items.map((_, index) => {
         const start = index * segmentAngle;
@@ -219,10 +242,14 @@
       });
     }
 
-    showSpinningButton.addEventListener('click', () => {
-      spinningPanel.classList.remove('hidden');
-      showSpinningButton.textContent = 'Spinning geöffnet';
-      showSpinningButton.disabled = true;
+    openSpinningButton.addEventListener('click', () => {
+      mainPage.classList.add('hidden');
+      spinningPage.classList.remove('hidden');
+    });
+
+    backToMainButton.addEventListener('click', () => {
+      spinningPage.classList.add('hidden');
+      mainPage.classList.remove('hidden');
     });
 
     applyLabelsButton.addEventListener('click', () => {
@@ -234,7 +261,7 @@
         .map((item) => item.trim())
         .filter(Boolean);
 
-      if (newItems.length > 1) {
+      if (newItems.length >= 1) {
         items = newItems;
         currentRotation = 0;
         wheel.style.transform = 'rotate(0deg)';
