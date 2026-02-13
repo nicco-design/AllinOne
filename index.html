@@ -51,6 +51,7 @@
     .wheel {
       position: absolute; inset: 0; border-radius: 50%; border: 8px solid #fff;
       box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+      transition: transform 4s cubic-bezier(0.2, 0.7, 0.1, 1);
       overflow: hidden; background: #ddd;
     }
     .labels { position: absolute; inset: 0; pointer-events: none; }
@@ -93,6 +94,8 @@
             <div id="wheel" class="wheel"></div>
             <div id="labels" class="labels"></div>
           </div>
+          <div id="wheel" class="wheel"></div>
+          <div id="labels" class="labels"></div>
         </div>
 
         <p class="small">Eine Beschriftung eingeben und hinzufügen:</p>
@@ -121,6 +124,7 @@
 
     const palette = ['#ffd166', '#90caf9', '#f48fb1', '#a5d6a7', '#ce93d8', '#ffab91', '#80cbc4'];
     let items = [''];
+    let items = ['Feld 1'];
     let currentRotation = 0;
 
     function renderWheel() {
@@ -141,6 +145,7 @@
         const label = document.createElement('span');
         label.className = 'label';
         label.textContent = text || 'Feld 1';
+        label.textContent = text;
         label.style.transform = `rotate(${angle}deg) translate(${radius}px) rotate(90deg)`;
         labelsLayer.appendChild(label);
       });
@@ -170,6 +175,10 @@
       labelInput.value = '';
       currentRotation = 0;
       wheelRotor.style.transform = 'rotate(0deg)';
+      items.push(raw);
+      labelInput.value = '';
+      currentRotation = 0;
+      wheel.style.transform = 'rotate(0deg)';
       renderWheel();
     });
 
@@ -177,6 +186,7 @@
       const extra = 4 * 360 + Math.floor(Math.random() * 360);
       currentRotation += extra;
       wheelRotor.style.transform = `rotate(${currentRotation}deg)`;
+      wheel.style.transform = `rotate(${currentRotation}deg)`;
     });
 
     renderWheel();
